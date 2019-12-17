@@ -2,7 +2,7 @@ import { Directive, Input, OnInit, ElementRef, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 
 /**
- * @class IonCollapseHeaderDirective
+ * IonCollapseHeaderDirective
  * @description this directive collapse header on scroll content
  * @usage
  * ```typescript
