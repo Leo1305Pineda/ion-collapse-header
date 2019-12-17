@@ -3,7 +3,7 @@
   "description": "Directive collapse header ionic 4",
   "version": "0.0.1",
   "author": "Leonardo Pineda",
-  "homepage": "https://github.com/Leo1305Pineda/ion-collapse-header.git",
+  "homepage": "https://ion-collapse-header.herokuapp.com/",
   "repository": {
     "type": "git",
     "url": "https://github.com/Leo1305Pineda/ion-collapse-header.git"
@@ -18,13 +18,13 @@
   ],
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "serve": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "build:lib": "ng build --prod ion-collapse-header",
-    "deploy:web": "ionic build --prod --build-optimizer --vendor-chunk=true && node server.js"
+    "start": "ionic build --prod --build-optimizer --vendor-chunk=true && node server.js"
   },
   "private": true,
   "dependencies": {
