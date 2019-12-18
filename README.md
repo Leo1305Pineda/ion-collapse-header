@@ -2,8 +2,6 @@
 
 This directive collapse header in ionic 4 with the scroll content.
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.3.
-
 ## Installing
 
 Run `npm i ion-collapse-header`.
@@ -17,14 +15,14 @@ import { IonCollapseHeaderModule } from 'ion-collapse-header';
 @NgModule({
     (...)
     imports: [
-        IonCollapseHeaderModule,
+        IonCollapseHeaderModule
     ],
     (...)
 })
 export class PageModule {}
 ```
 
-# Usage
+## Usage
 
 ```html
  <ion-header #header></ion-header>

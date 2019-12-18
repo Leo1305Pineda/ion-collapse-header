@@ -22,6 +22,7 @@ export class IonCollapseHeaderDirective implements OnInit, OnDestroy {
 
   scroll: any;
   activated: boolean;
+  offsetTop: number;
   /**
    * @description input ion-header conponet
    * @usage
@@ -65,12 +66,15 @@ export class IonCollapseHeaderDirective implements OnInit, OnDestroy {
   /**
    * initialize directive
    */
-  ngOnInit(): void {
+  async ngOnInit() {
     this.scroll.nativeElement.scrollEvents = this.scrollEvents;
     this.activated = this.header && this.content;
+    if (this.activated) {
+      await this.content.getScrollElement().then(() => this.offsetTop = this.header.el.offsetTop);
+    }
     this.onScrollSub = this.onScroll.subscribe((customEvent: CustomEvent) => {
       if (this.activated) {
-        const offsetHeight = this.header.el.offsetHeight;
+        const offsetHeight = this.header.el.offsetHeight - this.offsetTop;
         const currentY = customEvent.detail.currentY;
         if (currentY >= 0 && currentY < offsetHeight) {
           this.moveContent(currentY);
