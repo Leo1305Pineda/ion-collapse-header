@@ -8,6 +8,8 @@ Run `npm i ion-collapse-header`.
 
 ## Quickstart
 
+Import ion-collapse-header in you module page.
+
 ```typescript
 // Import the module
 import { IonCollapseHeaderModule } from 'ion-collapse-header';
@@ -23,6 +25,8 @@ export class PageModule {}
 ```
 
 ## Usage
+
+Then, just define collapse-haeder in the tag ion-content.
 
 ```html
  <ion-header #header></ion-header>
