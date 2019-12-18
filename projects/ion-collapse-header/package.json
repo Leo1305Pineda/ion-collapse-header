@@ -3,6 +3,10 @@
   "version": "0.0.5",
   "description": "Collapse header from scroll content ionic 4",
   "homepage": "https://ion-collapse-header.herokuapp.com/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Leo1305Pineda/ion-collapse-header.git"
+  },
   "author": {
     "name": "Leonardo Pineda",
     "email": "leo1305pineda@gmail.com"
