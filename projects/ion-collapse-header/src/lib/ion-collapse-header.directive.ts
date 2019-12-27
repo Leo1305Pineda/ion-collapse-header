@@ -1,5 +1,4 @@
-import { Directive, Input, OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Directive, Input, ElementRef } from '@angular/core';
 
 /**
  * IonCollapseHeaderDirective
@@ -18,11 +17,15 @@ import { Subject, Subscription } from 'rxjs';
     '(ionScroll)': 'onContentScroll($event)'
   }
 })
-export class IonCollapseHeaderDirective implements OnInit, OnDestroy {
+export class IonCollapseHeaderDirective {
 
-  scroll: any;
-  activated: boolean;
+  el: ElementRef;
+  isResize: boolean;
   offsetTop: number;
+  /**
+   * @description fit heigth header
+   */
+  @Input() fit = 0;
   /**
    * @description input ion-header conponet
    * @usage
@@ -50,49 +53,31 @@ export class IonCollapseHeaderDirective implements OnInit, OnDestroy {
   @Input() scrollEvents: boolean;
 
   /**
-   * @description subcription to custom event scroll
-   * @see onScroll
-   */
-  private onScroll = new Subject<CustomEvent>();
-  private onScrollSub: Subscription;
-
-  /**
    * @param el the element ion-content
    */
   constructor(el: ElementRef) {
-    this.scroll = el;
+    this.el = el;
+    this.el.nativeElement.scrollEvents = this.scrollEvents;
   }
 
-  /**
-   * initialize directive
-   */
-  async ngOnInit() {
-    this.scroll.nativeElement.scrollEvents = this.scrollEvents;
-    this.activated = this.header && this.content;
-    if (this.activated) {
-      await this.content.getScrollElement().then(() => this.offsetTop = this.header.el.offsetTop);
-    }
-    this.onScrollSub = this.onScroll.subscribe((customEvent: CustomEvent) => {
-      if (this.activated) {
-        const offsetHeight = this.header.el.offsetHeight - this.offsetTop;
-        const currentY = customEvent.detail.currentY;
-        if (currentY >= 0 && currentY < offsetHeight) {
-          this.moveContent(currentY);
-        } else if (currentY >= offsetHeight) {
-          this.moveContent(offsetHeight);
-        }
-      }
-    });
+  get activated(): boolean {
+    return !!(this.header && this.content) && !this.isResize;
   }
 
   /**
    * @description this move the components ion-content and ion-header
    * @param currentY Currente position to move comtent and header
    */
-  moveContent(currentY: number) {
+  async moveContent(currentY: number) {
     this.header.el.style.zIndex = 1;
-    this.content.el.style.setProperty('--offset-top',  `${currentY}px`);
+    this.isResize = true;
+    this.content.el.style.setProperty('--offset-top', `${currentY}px`);
     this.header.el.style.top = `-${currentY}px`;
+    if (this.isResize) {
+      setTimeout(() => {
+        this.isResize = false;
+      }, 20);
+    }
   }
 
   /**
@@ -101,16 +86,15 @@ export class IonCollapseHeaderDirective implements OnInit, OnDestroy {
    */
   onContentScroll(customEvent: CustomEvent) {
     if (this.activated) {
-      this.onScroll.next(customEvent);
-    }
-  }
-
-  /**
-   * @description Destroy the directived
-   */
-  ngOnDestroy(): void {
-    if (this.onScrollSub) {
-      this.onScrollSub.unsubscribe();
+      this.offsetTop = this.offsetTop ? this.offsetTop : this.header.el.offsetTop;
+      const currentY = customEvent.detail.currentY;
+      const offsetTop = this.header.el.offsetTop;
+      const offsetHeight = this.header.el.offsetHeight + this.fit;
+      if (offsetHeight + offsetTop - this.offsetTop >= 0 && currentY <= offsetHeight) {
+        this.moveContent(currentY);
+      } else {
+        this.moveContent(offsetHeight);
+      }
     }
   }
 
