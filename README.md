@@ -30,5 +30,5 @@ Then, just define collapse-haeder in the tag ion-content.
 
 ```html
  <ion-header #header></ion-header>
- <ion-content #content collapse-header [scrollEvents]=true [content]="content" [header]="header"></ion-content>
+ <ion-content collapse-header [header]="header" [scrollEvents]=true></ion-content>
 ```
