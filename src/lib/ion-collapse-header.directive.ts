@@ -11,6 +11,7 @@ import { Directive, Input, ElementRef } from '@angular/core';
  */
 @Directive({
   selector: '[collapse-header]',
+  // tslint:disable-next-line:use-host-property-decorator
   host: {
     '(ionScroll)': 'onContentScroll($event)'
   }
@@ -46,17 +47,21 @@ export class IonCollapseHeaderDirective {
    */
   async onContentScroll(customEvent: CustomEvent) {
     if (!!this.header) {
+      let enc = false;
       let currentY = customEvent.detail.currentY;
       currentY = currentY < this.header.el.offsetHeight * 0.9 ? currentY : this.header.el.offsetHeight;
       this.count++;
-      if (currentY < this.header.el.offsetHeight * 0.1) {
+      if (currentY < this.header.el.offsetHeight * 0.1 && this.count == 1) {
         this.header.el.style.marginTop = `${0}px`;
+        enc = true;
       }
       if (this.count >= 2) {
         this.count = 0;
         return;
       }
-      this.header.el.style.marginTop = `-${currentY}px`;
+      if (!enc) {
+        this.header.el.style.marginTop = `-${currentY}px`;
+      }
     }
   }
 
